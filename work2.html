@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แบบทดสอบปรนัย</title>
+    <!-- Vue 3 -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <!-- Vuetify 3 -->
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@3.7.4/dist/vuetify.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@3.7.4/dist/vuetify.min.js"></script>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+        #app {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .v-card {
+            margin-bottom: 20px;
+        }
+        .v-btn {
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <v-app>
+            <v-container>
+                <h1 class="text-center">🎓 แบบทดสอบปรนัย</h1>
+
+                <!-- แสดงคำถาม -->
+                <v-card
+                    v-for="(question, index) in questions"
+                    :key="index"
+                    class="v-card pa-4"
+                >
+                    <h2>{{ index + 1 }}. {{ question.text }}</h2>
+                    <v-radio-group v-model="answers[index]" row>
+                        <v-radio
+                            v-for="(option, optIndex) in question.options"
+                            :key="optIndex"
+                            :label="option"
+                            :value="optIndex"
+                        />
+                    </v-radio-group>
+                </v-card>
+
+                <!-- ปุ่มส่งคำตอบ -->
+                <v-btn
+                    block
+                    color="primary"
+                    class="mb-3"
+                    @click="submitAnswers"
+                >
+                    📤 ส่งคำตอบ
+                </v-btn>
+
+                <!-- แสดงคะแนน -->
+                <v-alert
+                    v-if="showResults"
+                    type="success"
+                    prominent
+                    class="mb-3"
+                >
+                    คุณได้คะแนน <strong>{{ score }}</strong>/{{ questions.length }}
+                </v-alert>
+
+                <!-- ปุ่มเริ่มใหม่ -->
+                <v-btn
+                    v-if="showResults"
+                    block
+                    color="green"
+                    @click="resetQuiz"
+                >
+                    🔄 ทำแบบทดสอบอีกครั้ง
+                </v-btn>
+            </v-container>
+        </v-app>
+    </div>
+    <script>
+        const { createApp } = Vue;
+        const { createVuetify } = Vuetify;
+
+        const vuetify = createVuetify();
+
+        const app = createApp({
+            data() {
+                return {
+                    questions: [
+                        { text: "HTML ย่อมาจากอะไร?", options: ["HyperText Markup Language", "Hyperlink Markup Language", "Home Tool Markup Language", "HyperTech Markup Language"], correct: 3 },
+                        { text: "CSS ย่อมาจากอะไร?", options: ["Cascading Style Sheets", "Colorful Style Sheets", "Computer Style Sheets", "Creative Style Sheets"], correct: 2 },
+                        { text: "JavaScript ใช้ทำอะไร?", options: ["ออกแบบเว็บไซต์", "สร้างฐานข้อมูล", "เพิ่มความสามารถให้เว็บไซต์", "กำหนดโครงสร้างเว็บไซต์"], correct: 2 },
+                        { text: "Vue.js คืออะไร?", options: ["Framework", "Library", "Tool", "API"], correct: 1 },
+                        { text: "OOP ย่อมาจากอะไร?", options: ["Object-Oriented Programming", "Objective-Oriented Programming", "Operator-Oriented Programming", "Option-Oriented Programming"], correct: 1 },
+                        { text: "If you are _ cold, have a hot drink to warm you up.จงเติมคำที่เว้นไว้ให้ถูกต้อง.", options: ["feel", "felt", "feels", "feeling"], correct: 3 },
+                        { text: "There _ empty seats left in the hall.จงเติมคำที่เว้นไว้ให้ถูกต้อง.", options: ["were no", "is no", "were not", "are not"], correct: 0 },
+                        { text: "The trip to Paris will _ an ideal opportunity to practice my French.จงเติมคำที่เว้นไว้ให้ถูกต้อง.", options: ["is", "be", "are", "was"], correct: 1 },
+                        { text: "If you’re agreeable to our proposal, we’ll______ahead.จงเติมคำที่เว้นไว้ให้ถูกต้อง.", options: ["go", "going", "gone", "went"], correct: 0 },
+                        { text: "We must deal with __ before it gets out of hand.จงเติมคำที่เว้นไว้ให้ถูกต้อง.", options: ["the situate", "the situation", "the situated", "the situates"], correct: 1 },
+                        { text: "น้ำแข็งแห้ง มีสีอะไร?", options: ["ขาว", "ดำ", "แดง", "น้ำเงิน"], correct: 0 },
+                        { text: "กุ้งทะเล มีพยาธิหรือไม่?", options: ["อาจจะมีเล็กน้อย", "มี", "ไม่มี", "มีเยอะ"], correct: 2 },
+                        { text: "โลกของเรา มีอายุกี่ปี?", options: ["4500 ล้านปี", "4400 ล้านปี", "4700 ล้านปี", "4600 ล้านปี"], correct: 3 },
+                        { text: "ใครเป็นคิดค้นการทำระเบิดปรามณู?", options: ["วิลเลี่ยม เธอเนอร์ ", "เซอร์ ไอแซก นิวตัน ", "วิลเลี่ยม เธอเนอร์ ", "อัลเบิร์ต ไอสไตน์ "], correct: 3 },
+                        { text: "กาบหอยแครงจะหุบเข้าหากันเมื่อไร?", options: ["เมื่ออากาศชื้น", "เมื่อโดนแสงแดด", "เมื่อขาดน้ำ", "เมื่อถูกสัมผัส"], correct: 3 },
+                        { text: "She has been employed at this job_____ 2005.จงเติมคำที่เว้นไว้ให้ถูกต้อง.", options: ["at", "since", "for", "on"], correct: 1 },
+                        { text: "The trip has been_____to include a few other events.จงเติมคำที่เว้นไว้ให้ถูกต้อง.", options: ["extended", "extend", "extending", "extends"], correct: 0 },
+                        { text: "How long have you _ unemployed.จงเติมคำที่เว้นไว้ให้ถูกต้อง.", options: ["are", "been", "be", "were"], correct: 1 },
+                        { text: "Her father has been missing _five years.จงเติมคำที่เว้นไว้ให้ถูกต้อง.", options: ["since", "when", "for", "of"], correct: 2 },
+                        { text: "Do you _ anyone to help out in the shop.จงเติมคำที่เว้นไว้ให้ถูกต้อง.", options: ["needful", "needs", "need", "needed"], correct: 2 },
+
+                    ],
+                    answers: Array(20).fill(null), // เก็บคำตอบของผู้ใช้ 
+                    score: 0, // คะแนนรวม
+                    showResults: false, // แสดงผลลัพธ์
+                };
+            },
+            methods: {
+                submitAnswers() {
+                    this.score = this.answers.reduce((total, answer, index) => {
+                        return answer === this.questions[index].correct ? total + 1 : total;
+                    }, 0);
+                    this.showResults = true;
+                },
+                resetQuiz() {
+                    this.answers = Array(this.questions.length).fill(null);
+                    this.score = 0;
+                    this.showResults = false;
+                },
+            },
+        });
+
+        app.use(vuetify).mount('#app');
+    </script>
+</body>
+</html>
