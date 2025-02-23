@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <title>New 3D Scene</title>
+    <link rel="stylesheet" href="work4.css">
+</head>
+<body>
+    <a-scene>
+        <!-- New 360 Background -->
+        <a-sky src="https://cdn.aframe.io/360-image-gallery-boilerplate/img/sibenik.jpg"></a-sky>
+
+        <!-- New Information Text -->
+        <a-text value="Name: Channarong Ninkaew\nID: 653380193-5"
+                color="#00FF00"
+                width="4"
+                position="-1 2 -3"></a-text>
+
+        <!-- New Object (rotating cube) -->
+        <a-box position="0 1 -2" 
+               depth="0.5" 
+               height="0.5" 
+               width="0.5" 
+               color="#008080">
+            <a-animation attribute="rotation" 
+                         dur="4000" 
+                         to="0 360 0" 
+                         repeat="indefinite"></a-animation>
+        </a-box>
+
+        <!-- New Interactive Plant Model -->
+        <a-entity scale="0.5 0.5 0.5" position="2 0 -3" gltf-model="https://cdn.aframe.io/link-traversal/models/plant/scene.gltf">
+            <a-animation attribute="rotation" 
+                         dur="6000" 
+                         to="0 360 0" 
+                         repeat="indefinite"></a-animation>
+        </a-entity>
+
+        <!-- New Animation (floating Dodecahedron) -->
+        <a-dodecahedron position="-2 1.5 -3" radius="0.3" color="#FFD700">
+            <a-animation attribute="position" 
+                         dur="3000" 
+                         from="-2 1.5 -3" 
+                         to="-2 2.5 -3" 
+                         repeat="indefinite" 
+                         direction="alternate"></a-animation>
+        </a-dodecahedron>
+
+    </a-scene>
+</body>
+</html>
