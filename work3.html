@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  </head>
+  <body>
+    <div id="myapp" class="container p-4"></div>
+    <script type="text/babel">
+      const quizData = [
+        { "question": "1.ข้อใดคือพืชที่สามารถสังเคราะห์แสงได้?", "options": ["เห็ด", "ตะไคร่น้ำ", "ยีสต์", "เชื้อรา"], "answer": 1 },
+        { "question": "2.คำว่า \"สามัคคี\" สื่อถึงความหมายใด?", "options": ["ความรัก", "ความปรองดอง", "การแบ่งแยก", "ความเสียสละ"], "answer": 1 },
+        { "question": "3.คำว่า \"ไผ่ลู่ลม\" มีความหมายในเชิงใด?", "options": ["อดทนต่อแรงกดดัน", "อ่อนน้อมยอมตาม", "แข็งแกร่งไม่ยอมใคร", "เปราะบาง"], "answer": 1 },
+        { "question": "4.ประโยคใดใช้ภาษาได้ถูกต้อง?", "options": ["ฉันไปหาหมอที่โรงบาลเมื่อวานนี้", "ฉันไปหาหมอที่โรงพยาบาลเมื่อวานนี้", "ฉันไปหาหมอที่โรงบาลเพราะมีไข้", "ฉันไปหาหมอที่โรงพยาบาลเพราะเมื่อวานนี้"], "answer": 1 },
+        { "question": "5.คำว่า \"กุศล\" มีความหมายตรงกับข้อใด?", "options": ["กรรมชั่ว", "ความดี", "ความสงสัย", "ความรู้"], "answer": 1 },
+        { "question": "6.คำว่า \"พจนานุกรม\" หมายถึงอะไร?", "options": ["หนังสือบอกความหมายของคำ", "หนังสือรวบรวมสำนวนไทย", "หนังสือรวบรวมคำศัพท์ภาษาอังกฤษ", "หนังสือบอกวิธีการใช้ภาษา"], "answer": 0 },
+        { "question": "7.ประโยคใดใช้คำพ้องรูปผิด?", "options": ["ฉันชอบเล่นช้าง", "ฉันชอบกินช้าง", "ฉันชอบภาพวาดช้าง", "ฉันเห็นช้างอยู่ในป่า"], "answer": 1 },
+        { "question": "8.คำในข้อใดเป็น คำสมาส?", "options": ["หนังสือเรียน", "วิทยาศาสตร์", "ราชวงศ์", "ความสุข"], "answer": 1 },
+        { "question": "9.ข้อใดเป็นคำไทยแท้?", "options": ["บิดา", "มารดา", "พ่อ", "บุพการี"], "answer": 2 },
+        { "question": "10.คำว่า \"ภาวะโลกร้อน\" จัดอยู่ในคำประเภทใด?", "options": ["คำประสม", "คำซ้อน", "คำสมาส", "คำสนธิ"], "answer": 0 },
+        { "question": "11.ข้อใดคือคำที่ใช้ ราชาศัพท์?", "options": ["เสวย", "ทาน", "รับประทาน", "กิน"], "answer": 0 },
+        { "question": "12.กระบวนการใดเกี่ยวข้องกับการถ่ายเทความร้อน?", "options": ["การระเหย", "การหลอมเหลว", "การควบแน่น", "ทั้งหมด"], "answer": 3 },
+        { "question": "13.น้ำเดือดที่อุณหภูมิเท่าใด?", "options": ["100°C", "0°C", "37°C", "50°C"], "answer": 0 },
+        { "question": "14.สิ่งมีชีวิตที่มีเซลล์เดียวในข้อใด?", "options": ["สาหร่าย", "แบคทีเรีย", "แมลง", "พืชชั้นสูง"], "answer": 1 },
+        { "question": "15.สารในข้อใดมีสถานะเป็นของแข็ง?", "options": ["น้ำแข็ง", "น้ำ", "ไอน้ำ", "น้ำมัน"], "answer": 0 },
+        { "question": "16.ข้อใดคือแก๊สที่พืชใช้ในกระบวนการสังเคราะห์แสง?", "options": ["คาร์บอนไดออกไซด์", "ออกซิเจน", "ไนโตรเจน", "ฮีเลียม"], "answer": 0 },
+        { "question": "17.การละลายน้ำตาลในน้ำจัดเป็นการเปลี่ยนแปลงแบบใด?", "options": ["การเปลี่ยนแปลงทางเคมี", "การสังเคราะห์", "การเปลี่ยนแปลงทางกายภาพ", "การเปลี่ยนแปลงของสถานะ"], "answer": 2 },
+        { "question": "18.ระบบสุริยะมีดวงดาวสำคัญคือดวงใด?", "options": ["ดวงจันทร์", "ดาวอังคาร", "ดวงอาทิตย์", "ดาวเสาร์"], "answer": 2 },
+        { "question": "19.ส่วนใดของร่างกายมนุษย์ทำหน้าที่สูบฉีดเลือด?", "options": ["สมอง", "ตับ", "หัวใจ", "ปอด"], "answer": 2 },
+        { "question": "20.ข้อใดไม่ใช่แหล่งพลังงานหมุนเวียน?","options": ["พลังงานน้ำ", "น้ำมันดิบ", "พลังงานลม", "พลังงานแสงอาทิตย์"], "answer": 1 },
+    ];
+
+      class QuizApp extends React.Component {
+        constructor() {
+          super();
+          this.state = {
+            currentStep: "start",
+            currentQuestionIndex: 0,
+            answers: Array(quizData.length).fill(null),
+            score: 0,
+          };
+        }
+
+        handleStart = () => {
+          this.setState({ currentStep: "quiz" });
+        };
+
+        handleOptionSelect = (index) => {
+          const { currentQuestionIndex, answers } = this.state;
+          const newAnswers = [...answers];
+          newAnswers[currentQuestionIndex] = index;
+          this.setState({ answers: newAnswers });
+        };
+
+        handleNext = () => {
+          this.setState((prevState) => ({
+            currentQuestionIndex: prevState.currentQuestionIndex + 1,
+          }));
+        };
+
+        handleSubmit = () => {
+          const { answers } = this.state;
+          let score = 0;
+          quizData.forEach((q, i) => {
+            if (answers[i] === q.answer) {
+              score++;
+            }
+          });
+          this.setState({ score, currentStep: "result" });
+        };
+
+        renderStart() {
+          return (
+            <div className="text-center">
+              <h2>แบบทดสอบวิชาภาษาไทยและวิทยาศาสตร์</h2>
+              <p>แบบทดสอบปรนัย 20 ข้อ พร้อมตรวจคะแนน</p>
+              <button className="btn btn-primary" onClick={this.handleStart}>เริ่มทำแบบทดสอบ</button>
+            </div>
+          );
+        }
+
+        renderQuiz() {
+          const { currentQuestionIndex, answers } = this.state;
+          const question = quizData[currentQuestionIndex];
+
+          return (
+            <div>
+              <h4>คำถาม {currentQuestionIndex + 1}/{quizData.length}</h4>
+              <p>{question.question}</p>
+              {question.options.map((option, index) => (
+                <div key={index}>
+                  <input
+                    type="radio"
+                    name={`question-${currentQuestionIndex}`}
+                    checked={answers[currentQuestionIndex] === index}
+                    onChange={() => this.handleOptionSelect(index)}
+                  />
+                  {" "}
+                  {option}
+                </div>
+              ))}
+              <div className="mt-3">
+                {currentQuestionIndex < quizData.length - 1 ? (
+                  <button className="btn btn-secondary" onClick={this.handleNext} disabled={answers[currentQuestionIndex] === null}>ถัดไป</button>
+                ) : (
+                  <button className="btn btn-success" onClick={this.handleSubmit} disabled={answers[currentQuestionIndex] === null}>ตรวจคำตอบ</button>
+                )}
+              </div>
+            </div>
+          );
+        }
+
+        renderResult() {
+          const { score } = this.state;
+          return (
+            <div className="text-center">
+              <h2>คุณทำแบบทดสอบเสร็จเรียบร้อย!</h2>
+              <p>คะแนนที่คุณได้: {score}/{quizData.length}</p>
+              <button className="btn btn-primary" onClick={() => window.location.reload()}>ทำแบบทดสอบใหม่</button>
+            </div>
+          );
+        }
+
+        render() {
+          const { currentStep } = this.state;
+          return (
+            <div className="card">
+              <div className="card-header">
+                <b>Work3 :</b> แบบทดสอบออนไลน์ด้วย ReactJS
+              </div>
+              <div className="card-body">
+                {currentStep === "start" && this.renderStart()}
+                {currentStep === "quiz" && this.renderQuiz()}
+                {currentStep === "result" && this.renderResult()}
+              </div>
+              <div className="card-footer text-center">
+                By นายชาญณรงค์ นิลแก้ว sec.2 653380193-5<br />
+                College of Computing, Khon Kaen University
+              </div>
+            </div>
+          );
+        }
+      }
+
+      const container = document.getElementById('myapp');
+      const root = ReactDOM.createRoot(container);
+      root.render(<QuizApp />);
+    </script>
+  </body>
+</html>
